@@ -33,23 +33,33 @@ public class MessageHandlerImpl implements MessageHandler {
 		if (message.startsWith(PREFIX)) {
 			final String command = messageUtils.getCommand(message);
 
-			if (command.equals("play")) {
+			if (command.equals("play") || command.equals("p")) {
 				final String url = messageUtils.getUrl(message);
 				playHandler.play((GuildMessageReceivedEvent) event, url, false);
-
 			}
 
-			if (command.equals("playnext")) {
+			if (command.equals("playnext") || command.equals("pn")) {
 				final String url = messageUtils.getUrl(message);
 				playHandler.play((GuildMessageReceivedEvent) event, url, true);
 			}
 
 			if (command.equals("skip")) {
 				playHandler.skip();
+				MessageHandler.sendMessage(":arrow_forward: Skipped song.", (GuildMessageReceivedEvent) event);
+			}
+
+			if (command.equals("clear")) {
+				playHandler.clear();
+				MessageHandler.sendMessage(":arrow_forward: The player has stopped and the queue has been cleared.", (GuildMessageReceivedEvent) event);
 			}
 
 			if (command.equals("queue")) {
 				handleQueueCommand((GuildMessageReceivedEvent) event);
+			}
+
+			if (command.equals("prefix")) {
+				PREFIX = command;
+				MessageHandler.sendMessage("I'll start listening to prefix " + PREFIX, (GuildMessageReceivedEvent) event);
 			}
 		}
 	}

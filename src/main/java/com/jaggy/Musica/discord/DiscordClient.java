@@ -10,13 +10,11 @@ import javax.security.auth.login.LoginException;
 
 @Service
 public class DiscordClient {
-	@Value("discord.token")
-	private String token;
-
 	private final JDA discordWrapper;
 
 	@Autowired
-	public DiscordClient(MessageListener messageListener) throws LoginException {
+	public DiscordClient(MessageListener messageListener,
+						 @Value("${discord.token}") String token) throws LoginException {
 		discordWrapper = JDABuilder
 				.createDefault(token)
 				.addEventListeners(messageListener)

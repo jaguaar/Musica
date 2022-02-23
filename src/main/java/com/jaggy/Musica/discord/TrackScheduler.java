@@ -89,4 +89,9 @@ public class TrackScheduler extends AudioEventAdapter {
 	public void skip() {
 		this.onTrackEnd(player, currentlyPlaying, AudioTrackEndReason.FINISHED);
 	}
+
+	public void clear() {
+		queue.clear();
+		this.onTrackEnd(player, currentlyPlaying, AudioTrackEndReason.FINISHED);
+	}
 }

@@ -11,6 +11,7 @@ import com.wrapper.spotify.requests.authorization.client_credentials.ClientCrede
 import com.wrapper.spotify.requests.data.playlists.GetPlaylistRequest;
 import com.wrapper.spotify.requests.data.tracks.GetTrackRequest;
 import org.apache.hc.core5.http.ParseException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -22,18 +23,13 @@ import java.util.stream.Collectors;
 
 @Service
 public class SpotifyService {
-
-	@Value("${spotify.client.id}")
-	private String clientSecret;
-
-	@Value("${spotify.client.secret}")
-	private String clientId;
-
 	private final SpotifyApi spotifyApi;
 	private final ClientCredentialsRequest clientCredentialsRequest;
 	private final ClientCredentials clientCredentials;
 
-	public SpotifyService() throws IOException, ParseException, SpotifyWebApiException {
+	@Autowired
+	public SpotifyService(@Value("${spotify.client.id}") String clientId,
+						  @Value("${spotify.client.secret}") String clientSecret) throws IOException, ParseException, SpotifyWebApiException {
 		spotifyApi = new SpotifyApi.Builder()
 				.setClientId(clientId)
 				.setClientSecret(clientSecret)

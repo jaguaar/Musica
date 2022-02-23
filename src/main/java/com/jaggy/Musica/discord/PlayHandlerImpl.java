@@ -39,25 +39,26 @@ public class PlayHandlerImpl implements PlayHandler {
 				joinChannel(event, channel);
 			}
 
-			if (youtubeUtils.isYoutubeSong(url)) {
-				playTrack(youtubeUtils.getAudioTrack(url), playNext);
-				return;
-			}
-
-			if (spotifyUtils.isSpotifySong(url)) {
-				final String songTitle = spotifyUtils.getSongTitle(url);
-				playTrack(youtubeUtils.searchSong(songTitle), playNext);
-				return;
-			}
-
 			if (spotifyUtils.isSpotifyPlaylist(url)) {
 				final List<String> songTitles = spotifyUtils.getSongTitles(url);
 				songTitles.forEach(title -> playTrack(youtubeUtils.searchSong(title), playNext));
 				return;
 			}
 
-			//Just search it
-			playTrack(youtubeUtils.searchSong(url), playNext);
+			final AudioTrack audioTrack;
+
+			if (youtubeUtils.isYoutubeSong(url)) {
+				audioTrack = youtubeUtils.getAudioTrack(url);
+			} else if (spotifyUtils.isSpotifySong(url)) {
+				final String songTitle = spotifyUtils.getSongTitle(url);
+				audioTrack = youtubeUtils.searchSong(songTitle);
+			} else {
+				//Just search it
+				audioTrack = youtubeUtils.searchSong(url);
+			}
+
+			MessageHandler.sendMessage("Added " + url + " to the Queue!", event);
+			playTrack(audioTrack, playNext);
 		}
 	}
 
@@ -68,6 +69,8 @@ public class PlayHandlerImpl implements PlayHandler {
 
 	private void joinChannel(final GuildMessageReceivedEvent event, final VoiceChannel channel) {
 		currentChannel = channel;
+
+		System.out.println("Joining channel " + channel.getName());
 
 		AudioManager manager = event.getGuild().getAudioManager();
 		manager.setSendingHandler(soundHandler);
@@ -87,5 +90,10 @@ public class PlayHandlerImpl implements PlayHandler {
 	@Override
 	public void skip() {
 		soundHandler.getTrackScheduler().skip();
+	}
+
+	@Override
+	public void clear() {
+		soundHandler.getTrackScheduler().clear();
 	}
 }
