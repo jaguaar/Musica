@@ -5,7 +5,6 @@ import com.jaggy.Musica.youtube.YoutubeUtils;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.VoiceChannel;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,25 +35,27 @@ public class PlayHandlerImpl implements PlayHandler {
 				joinChannel(message, channel);
 			}
 
-			if (youtubeUtils.isYoutubeSong(url)) {
-				playTrack(youtubeUtils.getAudioTrack(url), playNext);
-				return;
-			}
-
-			if (spotifyUtils.isSpotifySong(url)) {
-				final String songTitle = spotifyUtils.getSongTitle(url);
-				playTrack(youtubeUtils.searchSong(songTitle), playNext);
-				return;
-			}
-
 			if (spotifyUtils.isSpotifyPlaylist(url)) {
 				final List<String> songTitles = spotifyUtils.getSongTitles(url);
 				songTitles.forEach(title -> playTrack(youtubeUtils.searchSong(title), playNext));
+				message.getChannel().sendMessage(":arrow_forward: Added " + songTitles.size() + " songs from the playlist to the Queue!").queue();
 				return;
 			}
 
-			//Just search it
-			playTrack(youtubeUtils.searchSong(url), playNext);
+			AudioTrack audioTrack;
+
+			if (youtubeUtils.isYoutubeSong(url)) {
+				audioTrack = youtubeUtils.getAudioTrack(url);
+			} else if (spotifyUtils.isSpotifySong(url)) {
+				final String songTitle = spotifyUtils.getSongTitle(url);
+				audioTrack = youtubeUtils.searchSong(songTitle);
+			} else {
+				//Just search it
+				audioTrack = youtubeUtils.searchSong(url);
+			}
+
+			message.getChannel().sendMessage(":arrow_forward: Added " + audioTrack.getInfo().title + " to the Queue! (" + audioTrack.getInfo().uri + ")").queue();
+			playTrack(audioTrack, playNext);
 		}
 	}
 
