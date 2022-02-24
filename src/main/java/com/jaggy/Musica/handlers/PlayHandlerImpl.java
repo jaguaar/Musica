@@ -83,8 +83,10 @@ public class PlayHandlerImpl implements PlayHandler {
 	}
 
 	@Override
-	public void skip() {
+	public AudioTrack skip() {
+		AudioTrack currentlyPlaying = soundHandler.getTrackScheduler().getCurrentlyPlaying();
 		soundHandler.getTrackScheduler().skip();
+		return currentlyPlaying;
 	}
 
 	@Override

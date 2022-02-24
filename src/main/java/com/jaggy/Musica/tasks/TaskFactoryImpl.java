@@ -22,12 +22,12 @@ public class TaskFactoryImpl implements TaskFactory {
     @Override
     public Task buildTask(CommandEvent commandEvent) {
         return switch(commandEvent.getAction()){
-            case "play" -> new PlayTask(bot, commandEvent.getMessage(), commandEvent.getArgs().get(0), false);
-            case "playnext" -> new PlayTask(bot, commandEvent.getMessage(), commandEvent.getArgs().get(0), true);
-            case "skip" -> new SkipTask(bot);
-            case "queue" -> new QueueTask(bot, commandEvent.getMessage());
-            case "shuffle" -> new ShuffleTask(bot);
-            case "clear" -> new ClearTask(bot);
+            case "play", "p" -> new PlayTask(bot, commandEvent.getMessage(), commandEvent.getArgs().get(0), false);
+            case "playnext", "pn" -> new PlayTask(bot, commandEvent.getMessage(), commandEvent.getArgs().get(0), true);
+            case "skip", "s" -> new SkipTask(bot, commandEvent.getMessage());
+            case "queue", "q" -> new QueueTask(bot, commandEvent.getMessage());
+            case "shuffle" -> new ShuffleTask(bot, commandEvent.getMessage());
+            case "clear" -> new ClearTask(bot, commandEvent.getMessage());
             default -> new UnknownTask(commandEvent.getMessage());
         };
     }
