@@ -18,18 +18,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class JaggyBot implements CommandEventListener {
-
-    @Value("discord.token")
-    private String token;
-
     private final JDA jda;
 
     private final TaskFactory taskFactory;
     private final PlayHandler playHandler;
 
-    public JaggyBot(MessageEventListener messageEventListener, TaskFactory taskFactory, PlayHandler playHandler) throws LoginException {
+    public JaggyBot(MessageEventListener messageEventListener, TaskFactory taskFactory, PlayHandler playHandler, @Value("${discord.token}") String token) throws LoginException {
         this.jda = JDABuilder
-                .createDefault(token, List.of(GatewayIntent.GUILD_MESSAGES, GatewayIntent.DIRECT_MESSAGES))
+                .createDefault(token)
                 .addEventListeners(messageEventListener)
                 .build();
         this.taskFactory = taskFactory;

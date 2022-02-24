@@ -10,9 +10,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CommandEventParser {
+	private String PREFIX;
 
-	@Value("${command.prefix}")
-	private String PREFIX = "$";
+	public CommandEventParser(@Value("${command.prefix}") String PREFIX) {
+		this.PREFIX = PREFIX;
+	}
 
 	public Optional<CommandEvent> parseCommandEvent(final Message message) {
 		if (theAuthorIsNotABot(message) && startsWithPrefix(message)) {
