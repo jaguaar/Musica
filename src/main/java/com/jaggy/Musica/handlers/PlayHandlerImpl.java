@@ -1,8 +1,9 @@
-package com.jaggy.Musica.discord;
+package com.jaggy.Musica.handlers;
 
 import com.jaggy.Musica.spotify.SpotifyUtils;
 import com.jaggy.Musica.youtube.YoutubeUtils;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
@@ -27,16 +28,23 @@ public class PlayHandlerImpl implements PlayHandler {
 	}
 
 	@Override
-	public void play(final GuildMessageReceivedEvent event, final String url, boolean playNext) {
-		if (event.getAuthor().isBot()) {
-			return;
-		}
-
-		final VoiceChannel channel = event.getMember().getVoiceState().getChannel();
+	public void play(final Message message, final String url, boolean playNext) {
+		final VoiceChannel channel = message.getMember().getVoiceState().getChannel();
 
 		if (channel != null) {
 			if (currentChannel != channel) {
-				joinChannel(event, channel);
+				joinChannel(message, channel);
+			}
+
+			if (youtubeUtils.isYoutubeSong(url)) {
+				playTrack(youtubeUtils.getAudioTrack(url), playNext);
+				return;
+			}
+
+			if (spotifyUtils.isSpotifySong(url)) {
+				final String songTitle = spotifyUtils.getSongTitle(url);
+				playTrack(youtubeUtils.searchSong(songTitle), playNext);
+				return;
 			}
 
 			if (spotifyUtils.isSpotifyPlaylist(url)) {
@@ -45,20 +53,8 @@ public class PlayHandlerImpl implements PlayHandler {
 				return;
 			}
 
-			final AudioTrack audioTrack;
-
-			if (youtubeUtils.isYoutubeSong(url)) {
-				audioTrack = youtubeUtils.getAudioTrack(url);
-			} else if (spotifyUtils.isSpotifySong(url)) {
-				final String songTitle = spotifyUtils.getSongTitle(url);
-				audioTrack = youtubeUtils.searchSong(songTitle);
-			} else {
-				//Just search it
-				audioTrack = youtubeUtils.searchSong(url);
-			}
-
-			MessageHandler.sendMessage("Added " + url + " to the Queue!", event);
-			playTrack(audioTrack, playNext);
+			//Just search it
+			playTrack(youtubeUtils.searchSong(url), playNext);
 		}
 	}
 
@@ -67,12 +63,10 @@ public class PlayHandlerImpl implements PlayHandler {
 		soundHandler.getTrackScheduler().queue(audioTrack, playNext);
 	}
 
-	private void joinChannel(final GuildMessageReceivedEvent event, final VoiceChannel channel) {
+	private void joinChannel(final Message message, final VoiceChannel channel) {
 		currentChannel = channel;
 
-		System.out.println("Joining channel " + channel.getName());
-
-		AudioManager manager = event.getGuild().getAudioManager();
+		AudioManager manager = message.getGuild().getAudioManager();
 		manager.setSendingHandler(soundHandler);
 		manager.openAudioConnection(channel);
 	}
@@ -90,15 +84,5 @@ public class PlayHandlerImpl implements PlayHandler {
 	@Override
 	public void skip() {
 		soundHandler.getTrackScheduler().skip();
-	}
-
-	@Override
-	public void clear() {
-		soundHandler.getTrackScheduler().clear();
-	}
-
-	@Override
-	public void shuffle() {
-		soundHandler.getTrackScheduler().shuffle();
 	}
 }
