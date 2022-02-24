@@ -61,11 +61,6 @@ public class MessageHandlerImpl implements MessageHandler {
 				playHandler.shuffle();
 				MessageHandler.sendMessage(":twisted_rightwards_arrows: Shuffled Queue.", (GuildMessageReceivedEvent) event);
 			}
-
-			if (command.equals("prefix")) {
-				PREFIX = command;
-				MessageHandler.sendMessage(":ear: I'll start listening to prefix " + PREFIX, (GuildMessageReceivedEvent) event);
-			}
 		}
 	}
 
