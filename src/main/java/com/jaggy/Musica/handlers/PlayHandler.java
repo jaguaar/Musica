@@ -14,7 +14,7 @@ public interface PlayHandler {
 
 	AudioTrack getCurrentlyPlaying();
 
-	void skip();
+	AudioTrack skip();
 
 	void clear();
 
