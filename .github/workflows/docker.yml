@@ -8,15 +8,19 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: Gradle Build Action
+      uses: gradle/gradle-build-action@v2.1.3
+      with:
+        arguments: bootJar
+    - name: docker build
+      run: |
+        docker build . --file Dockerfile --tag timbo925/musica:latest
     - name: docker login
       env:
         DOCKER_USER: ${{ secrets.DOCKER_USER }}   
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}  
       run: |
-        docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-    - name: docker build
-      run: |
-        docker build . --file Dockerfile --tag timbo925/musica:latest
+        docker login -u $DOCKER_USER -p $DOCKER_PASSWORD    
     - name: docker push
       run: |
         docker push timbo925/musica:latest
