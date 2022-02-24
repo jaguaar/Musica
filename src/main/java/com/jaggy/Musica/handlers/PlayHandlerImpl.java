@@ -1,8 +1,9 @@
-package com.jaggy.Musica.discord;
+package com.jaggy.Musica.handlers;
 
 import com.jaggy.Musica.spotify.SpotifyUtils;
 import com.jaggy.Musica.youtube.YoutubeUtils;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
@@ -27,16 +28,12 @@ public class PlayHandlerImpl implements PlayHandler {
 	}
 
 	@Override
-	public void play(final GuildMessageReceivedEvent event, final String url, boolean playNext) {
-		if (event.getAuthor().isBot()) {
-			return;
-		}
-
-		final VoiceChannel channel = event.getMember().getVoiceState().getChannel();
+	public void play(final Message message, final String url, boolean playNext) {
+		final VoiceChannel channel = message.getMember().getVoiceState().getChannel();
 
 		if (channel != null) {
 			if (currentChannel != channel) {
-				joinChannel(event, channel);
+				joinChannel(message, channel);
 			}
 
 			if (youtubeUtils.isYoutubeSong(url)) {
@@ -66,10 +63,10 @@ public class PlayHandlerImpl implements PlayHandler {
 		soundHandler.getTrackScheduler().queue(audioTrack, playNext);
 	}
 
-	private void joinChannel(final GuildMessageReceivedEvent event, final VoiceChannel channel) {
+	private void joinChannel(final Message message, final VoiceChannel channel) {
 		currentChannel = channel;
 
-		AudioManager manager = event.getGuild().getAudioManager();
+		AudioManager manager = message.getGuild().getAudioManager();
 		manager.setSendingHandler(soundHandler);
 		manager.openAudioConnection(channel);
 	}

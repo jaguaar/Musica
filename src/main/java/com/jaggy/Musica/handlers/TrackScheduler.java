@@ -1,4 +1,4 @@
-package com.jaggy.Musica.discord;
+package com.jaggy.Musica.handlers;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
