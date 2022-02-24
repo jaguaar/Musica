@@ -2,8 +2,10 @@ package com.jaggy.Musica.tasks;
 
 import com.jaggy.Musica.JaggyBot;
 import com.jaggy.Musica.events.CommandEvent;
+import com.jaggy.Musica.tasks.audio.ClearTask;
 import com.jaggy.Musica.tasks.audio.PlayTask;
 import com.jaggy.Musica.tasks.audio.QueueTask;
+import com.jaggy.Musica.tasks.audio.ShuffleTask;
 import com.jaggy.Musica.tasks.audio.SkipTask;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -24,6 +26,8 @@ public class TaskFactoryImpl implements TaskFactory {
             case "playnext" -> new PlayTask(bot, commandEvent.getMessage(), commandEvent.getArgs().get(0), true);
             case "skip" -> new SkipTask(bot);
             case "queue" -> new QueueTask(bot, commandEvent.getMessage());
+            case "shuffle" -> new ShuffleTask(bot);
+            case "clear" -> new ClearTask(bot);
             default -> new UnknownTask(commandEvent.getMessage());
         };
     }

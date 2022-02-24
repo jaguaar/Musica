@@ -7,6 +7,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class TrackScheduler extends AudioEventAdapter {
@@ -88,5 +89,14 @@ public class TrackScheduler extends AudioEventAdapter {
 
 	public void skip() {
 		this.onTrackEnd(player, currentlyPlaying, AudioTrackEndReason.FINISHED);
+	}
+
+	public void clear() {
+		queue.clear();
+		this.onTrackEnd(player, currentlyPlaying, AudioTrackEndReason.FINISHED);
+	}
+
+	public void shuffle() {
+		Collections.shuffle(queue);
 	}
 }
