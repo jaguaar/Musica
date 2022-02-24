@@ -13,11 +13,17 @@ public class YoutubeUtils {
 	private final YoutubeAudioSourceManager youtubeAudioSourceManager = new YoutubeAudioSourceManager();
 
 	public boolean isYoutubeSong(String input) {
-		return input.toLowerCase().contains("youtube.com");
+		return input.toLowerCase().contains("youtube.com") || input.toLowerCase().contains("youtu.be");
 	}
 
 	public YoutubeAudioTrack getAudioTrack(final String song) {
-		final String videoId = song.substring(song.indexOf("?v=") + 3);
+		String videoId;
+
+		if(song.contains("?v=")) {
+			videoId = song.substring(song.indexOf("?v=") + 3);
+		} else {
+			videoId = song.substring(song.lastIndexOf("/") +1);
+		}
 
 		return (YoutubeAudioTrack) youtubeAudioSourceManager.loadTrackWithVideoId(videoId, true);
 	}
