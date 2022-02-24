@@ -85,4 +85,14 @@ public class PlayHandlerImpl implements PlayHandler {
 	public void skip() {
 		soundHandler.getTrackScheduler().skip();
 	}
+
+	@Override
+	public void clear() {
+		soundHandler.getTrackScheduler().clear();
+	}
+
+	@Override
+	public void shuffle() {
+		soundHandler.getTrackScheduler().shuffle();
+	}
 }
