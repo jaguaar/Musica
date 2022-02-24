@@ -5,11 +5,8 @@ import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioTrack;
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeSearchProvider;
 import com.sedmelluq.discord.lavaplayer.track.AudioItem;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import com.sedmelluq.discord.lavaplayer.track.BasicAudioPlaylist;
 import org.springframework.stereotype.Service;
-
-import java.util.function.Function;
 
 @Service
 public class YoutubeUtils {
@@ -27,12 +24,7 @@ public class YoutubeUtils {
 
 	public AudioTrack searchSong(String song) {
 		YoutubeSearchProvider youtubeSearchProvider = new YoutubeSearchProvider();
-		final AudioItem audioItem = youtubeSearchProvider.loadSearchResult(song, new Function<AudioTrackInfo, AudioTrack>() {
-			@Override
-			public AudioTrack apply(final AudioTrackInfo audioTrackInfo) {
-				return new YoutubeAudioTrack(audioTrackInfo, youtubeAudioSourceManager);
-			}
-		});
+		final AudioItem audioItem = youtubeSearchProvider.loadSearchResult(song, audioTrackInfo -> new YoutubeAudioTrack(audioTrackInfo, youtubeAudioSourceManager));
 
 		return ((BasicAudioPlaylist) audioItem).getTracks().get(0);
 	}
