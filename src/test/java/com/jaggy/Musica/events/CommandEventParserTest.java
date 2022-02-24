@@ -1,5 +1,6 @@
 package com.jaggy.Musica.events;
 
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.internal.entities.ReceivedMessage;
 import net.dv8tion.jda.internal.entities.SelfUserImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +17,7 @@ public class CommandEventParserTest {
 
     @BeforeEach
     public void setUp() {
-        parse = new CommandEventParser(".");
+        parse = new CommandEventParser(".", "jordy-discord-bot");
         receivedMessage = mock(ReceivedMessage.class);
     }
 
@@ -70,5 +71,8 @@ public class CommandEventParserTest {
     private void mockMessage(final String message) {
         when(receivedMessage.getContentRaw()).thenReturn(message);
         when(receivedMessage.getAuthor()).thenReturn(new SelfUserImpl(1l, null));
+        final TextChannel textChannel = mock(TextChannel.class);
+        when(textChannel.getName()).thenReturn("jordy-discord-bot");
+        when(receivedMessage.getChannel()).thenReturn(textChannel);
     }
 }

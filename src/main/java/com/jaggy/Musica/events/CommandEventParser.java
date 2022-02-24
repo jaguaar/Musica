@@ -15,16 +15,18 @@ import java.util.Properties;
 public class CommandEventParser {
 
     private final String PREFIX;
+    private final String CHANNEL;
 
     private final Properties shortcutList = new Properties();
 
-    public CommandEventParser(@Value("${command.prefix}") final String PREFIX) {
+    public CommandEventParser(@Value("${command.prefix}") final String PREFIX, @Value("${command.channel}") final String CHANNEL) {
         this.PREFIX = PREFIX;
+        this.CHANNEL = CHANNEL;
         loadShortcutList();
     }
 
     public Optional<CommandEvent> parseCommandEvent(final Message message) {
-        if (theAuthorIsNotABot(message)) {
+        if (theAuthorIsNotABot(message) && isChannel(message)) {
             if (startsWithPrefix(message)) {
                 final String contentRaw = message.getContentRaw();
                 final String[] split = contentRaw.split("\\s");
@@ -39,6 +41,10 @@ public class CommandEventParser {
             }
         }
         return Optional.empty();
+    }
+
+    private boolean isChannel(final Message message) {
+        return message.getChannel().getName().toLowerCase().contains(CHANNEL);
     }
 
     private boolean isSpotifyLink(final Message message) {
