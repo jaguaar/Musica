@@ -14,6 +14,9 @@ jobs:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}  
       run: |
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-    - name: Build the Docker image
+    - name: docker build
       run: |
         docker build . --file Dockerfile --tag timbo925/musica:latest
+    - name: docker push
+      run: |
+        docker push timbo925/musica:latest
