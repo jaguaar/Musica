@@ -17,4 +17,6 @@ public interface PlayHandler {
 	void skip();
 
 	void clear();
+
+	void shuffle();
 }

@@ -96,4 +96,9 @@ public class PlayHandlerImpl implements PlayHandler {
 	public void clear() {
 		soundHandler.getTrackScheduler().clear();
 	}
+
+	@Override
+	public void shuffle() {
+		soundHandler.getTrackScheduler().shuffle();
+	}
 }

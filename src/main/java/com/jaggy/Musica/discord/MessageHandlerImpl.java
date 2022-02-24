@@ -50,16 +50,21 @@ public class MessageHandlerImpl implements MessageHandler {
 
 			if (command.equals("clear")) {
 				playHandler.clear();
-				MessageHandler.sendMessage(":arrow_forward: The player has stopped and the queue has been cleared.", (GuildMessageReceivedEvent) event);
+				MessageHandler.sendMessage(":stop_button: The player has stopped and the queue has been cleared.", (GuildMessageReceivedEvent) event);
 			}
 
 			if (command.equals("queue")) {
 				handleQueueCommand((GuildMessageReceivedEvent) event);
 			}
 
+			if (command.equals("shuffle")) {
+				playHandler.shuffle();
+				MessageHandler.sendMessage(":twisted_rightwards_arrows: Shuffled Queue.", (GuildMessageReceivedEvent) event);
+			}
+
 			if (command.equals("prefix")) {
 				PREFIX = command;
-				MessageHandler.sendMessage("I'll start listening to prefix " + PREFIX, (GuildMessageReceivedEvent) event);
+				MessageHandler.sendMessage(":ear: I'll start listening to prefix " + PREFIX, (GuildMessageReceivedEvent) event);
 			}
 		}
 	}
