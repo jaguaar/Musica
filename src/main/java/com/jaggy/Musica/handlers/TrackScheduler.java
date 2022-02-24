@@ -33,7 +33,6 @@ public class TrackScheduler extends AudioEventAdapter {
 
 	@Override
 	public void onTrackStart(AudioPlayer player, AudioTrack track) {
-		System.out.println("started");
 	}
 
 	@Override
