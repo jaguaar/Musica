@@ -30,3 +30,7 @@ jobs:
     - name: docker push
       run: |
         docker push timbo925/musica:latest
+    - uses: fateyan/action-discord-notifier@v1
+      with:
+        message-title: Successfullly pushed to docker
+        webhook: ${{ secrets.DISCORD_WEBHOOK }}
