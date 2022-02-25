@@ -49,6 +49,8 @@ public class TrackScheduler extends AudioEventAdapter {
 				player.playTrack(nextTrack);
 				currentlyPlaying = nextTrack;
 				System.out.println("Starting queued song " + nextTrack.getInfo().title);
+			} else {
+				player.stopTrack();
 			}
 		}
 	}
