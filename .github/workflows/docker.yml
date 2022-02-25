@@ -20,7 +20,7 @@ jobs:
         arguments: bootJar
     - name: docker build
       run: |
-        docker build . --file Dockerfile --tag timbo925/musica:latest
+        docker build . --file Dockerfile --tag timbo925/musica:latest timbo925/musica:version_$GITHUB_RUN_NUMBER
     - name: docker login
       env:
         DOCKER_USER: ${{ secrets.DOCKER_USER }}   
