@@ -43,5 +43,5 @@ jobs:
     - name: Announce Discord
       uses: fateyan/action-discord-notifier@v1
       with:
-        message-title: Successfullly pushed to docker
+        message-title: Successfullly pushed to docker version $GITHUB_RUN_NUMBER
         webhook: ${{ secrets.DISCORD_WEBHOOK }}
