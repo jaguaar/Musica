@@ -29,7 +29,7 @@ jobs:
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD    
     - name: docker push
       run: |
-        docker push timbo925/musica
+        docker push timbo925/musica --all-tags
     - uses: fateyan/action-discord-notifier@v1
       with:
         message-title: Successfullly pushed to docker
