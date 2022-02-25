@@ -1,9 +1,12 @@
 package com.jaggy.Musica.events.parsers;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Predicate;
 
 import com.jaggy.Musica.events.CommandEvent;
 
+import kotlin.Pair;
 import net.dv8tion.jda.api.entities.Message;
 
 public abstract class AbstractEventParser {
@@ -20,6 +23,14 @@ public abstract class AbstractEventParser {
 
 	public final boolean matches(final Message message) {
 		return predicate.test(message);
+	}
+
+	protected final Pair<String, List<String>> parseContentRaw(final String contentRaw) {
+		final String[] split = contentRaw.split("\\s");
+		return switch (split.length) {
+		case 1 -> new Pair(split[0].substring(PREFIX.length()), List.of());
+		default -> new Pair(split[0].substring(PREFIX.length()), Arrays.asList(split).subList(1, split.length));
+		};
 	}
 
 	public abstract CommandEvent parseCommandEvent(final Message message);

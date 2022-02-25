@@ -25,7 +25,7 @@ public class ShortcutEventParser extends AbstractEventParser {
 	public ShortcutEventParser(@Value("${command.prefix}") final String PREFIX, @Value("${command.channel}") final String CHANNEL) {
 		super(PREFIX, CHANNEL);
 		loadShortcutList();
-		predicate.and(isShortCutOrSpotifyLink());
+		this.predicate = predicate.and(isShortCutOrSpotifyLink());
 	}
 
 	@Override
