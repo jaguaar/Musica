@@ -1,12 +1,13 @@
 package com.jaggy.Musica.handlers;
 
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import net.dv8tion.jda.api.entities.Message;
-
 import java.util.List;
 
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+
+import net.dv8tion.jda.api.entities.Message;
+
 public interface PlayHandler {
-	void play(Message message, String url, boolean playNext);
+	void play(Message message, List<String> args, boolean playNext);
 
 	void playTrack(AudioTrack audioTrack, boolean playNext);
 

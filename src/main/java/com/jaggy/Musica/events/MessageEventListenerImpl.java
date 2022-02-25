@@ -1,49 +1,53 @@
 package com.jaggy.Musica.events;
 
-import com.jaggy.Musica.events.parsers.AbstractEventParser;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import java.util.List;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import com.jaggy.Musica.events.parsers.AbstractEventParser;
+
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 @Async
 @Component
 public class MessageEventListenerImpl extends ListenerAdapter implements MessageEventListener {
 
-    private final List<AbstractEventParser> parsers;
-    private final List<CommandEventListener> listeners;
+	private final Logger LOG = LogManager.getLogger(MessageEventListenerImpl.class);
 
-    public MessageEventListenerImpl(
-            @Qualifier("CommandEventParser") final AbstractEventParser parser,
-            @Qualifier("ShortcutEventParser") final AbstractEventParser shortcutParser,
-            @Qualifier("GifEventParser") final AbstractEventParser gifParser,
-            @Lazy final List<CommandEventListener> listeners) {
-        this.listeners = listeners;
-        this.parsers = List.of(parser, shortcutParser, gifParser);
-    }
+	private final List<AbstractEventParser> parsers;
+	private final List<CommandEventListener> listeners;
 
-    @Override
-    public void onGuildMessageReceived(final GuildMessageReceivedEvent event) {
-        processMessage(event.getMessage());
-    }
+	public MessageEventListenerImpl(final List<AbstractEventParser> parsers,
+			@Lazy final List<CommandEventListener> listeners) {
+		this.parsers = parsers;
+		this.listeners = listeners;
+	}
 
-    @Override
-    public void onPrivateMessageReceived(@NotNull final PrivateMessageReceivedEvent event) {
-        processMessage(event.getMessage());
-    }
+	@Override
+	public void onGuildMessageReceived(final GuildMessageReceivedEvent event) {
+		LOG.debug("Guild message received from {}", event.getAuthor());
+		processMessage(event.getMessage());
+	}
 
-    private void processMessage(final Message message) {
-        parsers.stream()
-                .filter(abstractEventParser -> abstractEventParser.matches(message))
-                .map(abstractEventParser -> abstractEventParser.parseCommandEvent(message))
-                .forEach(commandEvent -> listeners.forEach(l -> l.onCommandEvent(commandEvent)));
-    }
-    
+	@Override
+	public void onPrivateMessageReceived(@NotNull final PrivateMessageReceivedEvent event) {
+		LOG.debug("Private message received from {}", event.getAuthor());
+		processMessage(event.getMessage());
+	}
+
+	private void processMessage(final Message message) {
+		parsers.stream()
+				.filter(abstractEventParser -> abstractEventParser.matches(message))
+				.map(abstractEventParser -> abstractEventParser.parseCommandEvent(message))
+				.forEach(commandEvent -> listeners.forEach(l -> l.onCommandEvent(commandEvent)));
+	}
+
 }
