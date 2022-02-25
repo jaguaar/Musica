@@ -33,8 +33,8 @@ public class PlayHandlerImpl implements PlayHandler {
 
     @Autowired
     public PlayHandlerImpl(final SoundHandler soundHandler, final YoutubeUtils youtubeUtils, final SpotifyUtils spotifyUtils,
-                           @Value("${play.overruling.enable}") final boolean enableOverruling,
-                           @Value("${play.overruling.random.factor}") final int randomFactor) {
+                           @Value("${play.random.overruling.enable}") final boolean enableOverruling,
+                           @Value("${play.random.overruling.factor}") final int randomFactor) {
         this.soundHandler = soundHandler;
         this.youtubeUtils = youtubeUtils;
         this.spotifyUtils = spotifyUtils;
