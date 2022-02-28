@@ -10,6 +10,7 @@ import com.jaggy.Musica.tasks.audio.PlayTask;
 import com.jaggy.Musica.tasks.audio.QueueTask;
 import com.jaggy.Musica.tasks.audio.ShuffleTask;
 import com.jaggy.Musica.tasks.audio.SkipTask;
+import com.jaggy.Musica.tasks.messaging.InsultTask;
 
 @Component
 public class TaskFactoryImpl implements TaskFactory {
@@ -29,6 +30,7 @@ public class TaskFactoryImpl implements TaskFactory {
 		case "queue", "q" -> new QueueTask(bot, commandEvent.getMessage());
 		case "shuffle" -> new ShuffleTask(bot, commandEvent.getMessage());
 		case "clear" -> new ClearTask(bot, commandEvent.getMessage());
+		case "bravo" -> new InsultTask(bot, commandEvent.getMessage());
 		default -> new UnknownTask(commandEvent.getMessage());
 		};
 	}
