@@ -10,16 +10,12 @@ import org.apache.hc.core5.http.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.wrapper.spotify.SpotifyApi;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
-import com.wrapper.spotify.model_objects.credentials.ClientCredentials;
 import com.wrapper.spotify.model_objects.specification.ArtistSimplified;
 import com.wrapper.spotify.model_objects.specification.Playlist;
 import com.wrapper.spotify.model_objects.specification.Track;
-import com.wrapper.spotify.requests.authorization.client_credentials.ClientCredentialsRequest;
 import com.wrapper.spotify.requests.data.playlists.GetPlaylistRequest;
 import com.wrapper.spotify.requests.data.tracks.GetTrackRequest;
 
@@ -28,28 +24,15 @@ public class SpotifyService {
 
 	private final Logger LOG = LogManager.getLogger(SpotifyService.class);
 
-	private final SpotifyApi spotifyApi;
-	private final ClientCredentialsRequest clientCredentialsRequest;
-	private final ClientCredentials clientCredentials;
+	private final SpotifyConnector spotifyConnector;
 
 	@Autowired
-	public SpotifyService(@Value("${spotify.client.id}") final String clientId,
-			@Value("${spotify.client.secret}") final String clientSecret) throws IOException, ParseException, SpotifyWebApiException {
-		spotifyApi = new SpotifyApi.Builder()
-				.setClientId(clientId)
-				.setClientSecret(clientSecret)
-				.build();
-
-		clientCredentialsRequest = spotifyApi.clientCredentials()
-				.build();
-
-		clientCredentials = clientCredentialsRequest.execute();
-
-		spotifyApi.setAccessToken(clientCredentials.getAccessToken());
+	public SpotifyService(final SpotifyConnector spotifyConnector) {
+		this.spotifyConnector = spotifyConnector;
 	}
 
 	public List<String> loadPlaylist(final String playlistId) {
-		final GetPlaylistRequest getPlaylistRequest = spotifyApi.getPlaylist(playlistId).build();
+		final GetPlaylistRequest getPlaylistRequest = spotifyConnector.getApi().getPlaylist(playlistId).build();
 		try {
 			final Playlist playlist = getPlaylistRequest.execute();
 			return Arrays.stream(playlist.getTracks().getItems())
@@ -63,7 +46,7 @@ public class SpotifyService {
 	}
 
 	public String getSongTitle(final String trackId) {
-		final GetTrackRequest getTrackRequest = spotifyApi.getTrack(trackId).build();
+		final GetTrackRequest getTrackRequest = spotifyConnector.getApi().getTrack(trackId).build();
 		try {
 			final Track actualTrack = getTrackRequest.execute();
 			final List<String> artists = Arrays.stream(actualTrack.getArtists()).map(ArtistSimplified::getName).collect(Collectors.toList());
