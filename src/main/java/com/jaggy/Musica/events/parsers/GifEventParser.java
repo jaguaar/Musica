@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.List;
 import java.util.function.Predicate;
 
 import org.apache.logging.log4j.LogManager;
@@ -13,10 +14,11 @@ import org.springframework.stereotype.Component;
 
 import com.jaggy.Musica.events.CommandEvent;
 
+import kotlin.Pair;
 import net.dv8tion.jda.api.entities.Message;
 
 @Component(value = "GifEventParser")
-public class GifEventParser extends CommandEventParser {
+public class GifEventParser extends AbstractEventParser {
 
 	private final Logger LOG = LogManager.getLogger(GifEventParser.class);
 
@@ -27,14 +29,15 @@ public class GifEventParser extends CommandEventParser {
 	public GifEventParser(@Value("${command.prefix}") final String PREFIX, @Value("${command.channel}") final String CHANNEL) {
 		super(PREFIX, CHANNEL);
 		loadGifList();
-		predicate.and(isKnownGif());
+		this.predicate = predicate.and(isKnownGif());
 	}
 
 	@Override
 	public CommandEvent parseCommandEvent(final Message message) {
 		if (matches(message)) {
 			final String contentRaw = gifCommand.get(message.getContentRaw());
-			return parseCommandString(message, contentRaw);
+			final Pair<String, List<String>> actionAndArgs = parseContentRaw(contentRaw);
+			return new CommandEvent(message, actionAndArgs.getFirst(), actionAndArgs.getSecond());
 		}
 		return null;
 	}

@@ -1,11 +1,17 @@
 name: Docker Image CI
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    env:
+      SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+      SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
+      DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 17
@@ -14,23 +20,28 @@ jobs:
         java-version: 17
         distribution: 'adopt'
         java-package: jdk
-    - name: Gradle Build Action
+    - name: Gradle Test
+      uses: gradle/gradle-build-action@v2.1.3
+      with:
+        arguments: test    
+    - name: Gradle Build Jar
       uses: gradle/gradle-build-action@v2.1.3
       with:
         arguments: bootJar
-    - name: docker build
+    - name: Docker build
       run: |
         docker build . --file Dockerfile --tag timbo925/musica:latest --tag timbo925/musica:version_$GITHUB_RUN_NUMBER
-    - name: docker login
+    - name: Docker login
       env:
         DOCKER_USER: ${{ secrets.DOCKER_USER }}   
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}  
       run: |
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD    
-    - name: docker push
+    - name: Docker push
       run: |
         docker push timbo925/musica --all-tags
-    - uses: fateyan/action-discord-notifier@v1
+    - name: Announce Discord
+      uses: fateyan/action-discord-notifier@v1
       with:
-        message-title: Successfullly pushed to docker
+        message-title: Successfullly pushed to docker version ${{github.run_number}}
         webhook: ${{ secrets.DISCORD_WEBHOOK }}
