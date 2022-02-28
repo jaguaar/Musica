@@ -28,8 +28,8 @@ public abstract class AbstractEventParser {
 	protected final Pair<String, List<String>> parseContentRaw(final String contentRaw) {
 		final String[] split = contentRaw.split("\\s");
 		return switch (split.length) {
-		case 1 -> new Pair(split[0].substring(PREFIX.length()), List.of());
-		default -> new Pair(split[0].substring(PREFIX.length()), Arrays.asList(split).subList(1, split.length));
+		case 1 -> new Pair<>(split[0].substring(PREFIX.length()), List.of());
+		default -> new Pair<>(split[0].substring(PREFIX.length()), Arrays.asList(split).subList(1, split.length));
 		};
 	}
 

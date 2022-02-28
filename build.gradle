@@ -24,6 +24,7 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'se.michaelthelin.spotify:spotify-web-api-java:6.5.4'
     implementation 'net.dv8tion:JDA:4.3.0_277'
     implementation 'com.github.sapher:youtubedl-java:1.1'
