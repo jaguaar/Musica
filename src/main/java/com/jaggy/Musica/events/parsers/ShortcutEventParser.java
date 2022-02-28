@@ -51,7 +51,7 @@ public class ShortcutEventParser extends AbstractEventParser {
 	}
 
 	private void loadShortcutList() {
-		try (final InputStream input = GifEventParser.class.getClassLoader().getResourceAsStream("shortcut.properties")) {
+		try (final InputStream input = ShortcutEventParser.class.getClassLoader().getResourceAsStream("shortcut.properties")) {
 			shortcutList.load(input);
 		} catch (final IOException e) {
 			LOG.error("Could not load short cut list", e);
