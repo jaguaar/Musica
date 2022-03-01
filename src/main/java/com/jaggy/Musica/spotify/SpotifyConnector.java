@@ -30,13 +30,7 @@ public class SpotifyConnector {
 				.setClientId(clientId)
 				.setClientSecret(clientSecret)
 				.build();
-		try {
-			clientCredentials = spotifyApi.clientCredentials().build().execute();
-			refreshToken();
-		} catch (final IOException | ParseException | SpotifyWebApiException e) {
-			LOG.error("Problem setting up SpotifyConnector", e);
-			throw e;
-		}
+		refreshToken();
 	}
 
 	public SpotifyApi getApi() {
