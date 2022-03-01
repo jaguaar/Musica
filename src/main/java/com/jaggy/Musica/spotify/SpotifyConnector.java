@@ -20,7 +20,7 @@ public class SpotifyConnector {
 	private final Logger LOG = LogManager.getLogger(SpotifyConnector.class);
 
 	private final SpotifyApi spotifyApi;
-	private final ClientCredentials clientCredentials;
+	private ClientCredentials clientCredentials;
 
 	private LocalDateTime tokenDate = LocalDateTime.now().minus(Duration.ofMinutes(60));
 
@@ -48,8 +48,13 @@ public class SpotifyConnector {
 		final LocalDateTime now = LocalDateTime.now();
 		if (now.minus(Duration.ofMinutes(50)).isAfter(tokenDate)) {
 			LOG.info("Fetching new spotify token");
-			spotifyApi.setAccessToken(clientCredentials.getAccessToken());
-			tokenDate = now;
+			try {
+				clientCredentials = spotifyApi.clientCredentials().build().execute();
+				spotifyApi.setAccessToken(clientCredentials.getAccessToken());
+				tokenDate = now;
+			} catch (final IOException | SpotifyWebApiException | ParseException e) {
+				LOG.error("Problem Refreshing Token", e);
+			}
 		}
 	}
 }
