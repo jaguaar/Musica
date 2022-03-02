@@ -1,5 +1,6 @@
 package com.jaggy.Musica.handlers;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,7 +31,7 @@ public class PlayHandlerImpl implements PlayHandler {
 	}
 
 	@Override
-	public void play(final Message message, final List<String> args, final boolean playNext) {
+	public void play(final Message message, final List<String> args, final boolean playNext, boolean shuffle) {
 		final VoiceChannel channel = message.getMember().getVoiceState().getChannel();
 
 		if (channel != null) {
@@ -42,8 +43,21 @@ public class PlayHandlerImpl implements PlayHandler {
 
 			if (spotifyUtils.isSpotifyPlaylist(url)) {
 				final List<String> songTitles = spotifyUtils.getSongTitles(url);
+
+				if(shuffle) {
+					Collections.shuffle(songTitles);
+				}
+
 				songTitles.parallelStream().map(youtubeUtils::searchSong).forEachOrdered(track -> playTrack(track, playNext));
-				message.getChannel().sendMessage(":arrow_forward: Added " + songTitles.size() + " songs from the playlist to the Queue!").queue();
+
+				final String messageText =
+						(shuffle ? ":twisted_rightwards_arrows: Shuffled " : ":arrow_forward: Added ") +
+						songTitles.size() +
+						" songs from the playlist " +
+						(shuffle ? "into" : "to") +
+						" the Queue!";
+
+				message.getChannel().sendMessage(messageText).queue();
 				return;
 			}
 
