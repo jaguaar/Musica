@@ -1,6 +1,7 @@
 package com.jaggy.Musica.handlers;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,7 +32,7 @@ public class PlayHandlerImpl implements PlayHandler {
 	}
 
 	@Override
-	public void play(final Message message, final List<String> args, final boolean playNext) {
+	public void play(final Message message, final List<String> args, final boolean playNext, boolean shuffle) {
 		final VoiceChannel channel = message.getMember().getVoiceState().getChannel();
 
 		if (channel != null) {
@@ -56,6 +57,10 @@ public class PlayHandlerImpl implements PlayHandler {
 				message.getChannel().sendMessage(":arrow_forward: Added " + tracks.get(0).getInfo().title + " to the Queue! (" + tracks.get(0).getInfo().uri + ")").queue();
 			} else if (tracks.size() > 1) {
 				message.getChannel().sendMessage(":arrow_forward: Added " + tracks.size() + " songs from to the Queue!").queue();
+			}
+
+			if(shuffle) {
+				Collections.shuffle(tracks);
 			}
 
 			tracks.forEach(track -> {
