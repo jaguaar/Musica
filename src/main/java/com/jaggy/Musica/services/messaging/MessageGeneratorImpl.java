@@ -5,11 +5,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 @Component
-public class InsultServiceImpl implements InsultService {
+public class MessageGeneratorImpl implements MessageGenerator {
 
 	private final RestTemplate restTemplate;
 
-	public InsultServiceImpl(final RestTemplateBuilder restTemplateBuilder) {
+	public MessageGeneratorImpl(final RestTemplateBuilder restTemplateBuilder) {
 		this.restTemplate = restTemplateBuilder.build();
 	}
 
@@ -19,4 +19,9 @@ public class InsultServiceImpl implements InsultService {
 		return response.insult();
 	}
 
+	@Override
+	public String generateCompliment() {
+		final Compliment response = restTemplate.getForObject("https://complimentr.com/api", Compliment.class);
+		return response.compliment();
+	}
 }

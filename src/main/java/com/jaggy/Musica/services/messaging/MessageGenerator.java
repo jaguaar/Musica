@@ -1,5 +1,7 @@
 package com.jaggy.Musica.services.messaging;
 
-public interface InsultService {
+public interface MessageGenerator {
 	String generateInsult();
+
+	String generateCompliment();
 }
