@@ -1,5 +1,6 @@
 package com.jaggy.Musica.handlers;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,6 +18,7 @@ import net.dv8tion.jda.api.managers.AudioManager;
 
 @Component
 public class PlayHandlerImpl implements PlayHandler {
+	public static final String ADDED = ":arrow_forward: Added ";
 	private final SoundHandler soundHandler;
 	private final YoutubeUtils youtubeUtils;
 	private final SpotifyUtils spotifyUtils;
@@ -40,42 +42,33 @@ public class PlayHandlerImpl implements PlayHandler {
 			}
 
 			final String url = args.get(0);
+			final List<AudioTrack> tracks = new ArrayList<>();
 
-			if (spotifyUtils.isSpotifyPlaylist(url)) {
+			if (spotifyUtils.isSpotify(url)) {
+				message.getChannel().sendMessage("Processing " + url).queue();
 				final List<String> songTitles = spotifyUtils.getSongTitles(url);
-
-				if(shuffle) {
-					Collections.shuffle(songTitles);
-				}
-
-				songTitles.parallelStream().map(youtubeUtils::searchSong).forEachOrdered(track -> playTrack(track, playNext));
-
-				final String messageText =
-						(shuffle ? ":twisted_rightwards_arrows: Shuffled " : ":arrow_forward: Added ") +
-						songTitles.size() +
-						" songs from the playlist " +
-						(shuffle ? "into" : "to") +
-						" the Queue!";
-
-				message.getChannel().sendMessage(messageText).queue();
-				return;
-			}
-
-			final AudioTrack audioTrack;
-
-			if (youtubeUtils.isYoutubeSong(url)) {
-				audioTrack = youtubeUtils.getAudioTrack(url);
-			} else if (spotifyUtils.isSpotifySong(url)) {
-				final String songTitle = spotifyUtils.getSongTitle(url);
-				audioTrack = youtubeUtils.searchSong(songTitle);
+				songTitles.parallelStream().map(youtubeUtils::searchSong).forEachOrdered(tracks::add);
+			} else if (youtubeUtils.isYoutubeSong(url)) {
+				tracks.add(youtubeUtils.getAudioTrack(url));
 			} else {
 				// Just search it
-				audioTrack = youtubeUtils.searchSong(args.stream().collect(Collectors.joining(" ")));
+				tracks.add(youtubeUtils.searchSong(args.stream().collect(Collectors.joining(" "))));
 			}
 
-			message.getChannel()
-					.sendMessage(":arrow_forward: Added " + audioTrack.getInfo().title + " to the Queue! (" + audioTrack.getInfo().uri + ")").queue();
-			playTrack(audioTrack, playNext);
+			if(shuffle) {
+				Collections.shuffle(tracks);
+			}
+
+			tracks.forEach(track -> {
+				playTrack(track, playNext);
+			});
+
+			if (tracks.size() == 1) {
+				message.getChannel().sendMessage(ADDED + tracks.get(0).getInfo().title + " to the Queue! (" + tracks.get(0).getInfo().uri + ")").queue();
+			} else if (tracks.size() > 1) {
+				final String messageText = ADDED + tracks.size() + " songs to the Queue!";
+				message.getChannel().sendMessage(shuffle ? messageText + " (Shuffled!)" : messageText).queue();
+			}
 		}
 	}
 
