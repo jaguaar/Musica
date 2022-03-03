@@ -22,6 +22,10 @@ public class SpotifyUtils {
 		return url.toLowerCase().contains("open.spotify.com") && url.toLowerCase().contains("/playlist/");
 	}
 
+	public boolean isSpotifyAlbum(final String url) {
+		return url.toLowerCase().contains("open.spotify.com") && url.toLowerCase().contains("/album/");
+	}
+
 	public String getSpotifyIdentifier(final String url) {
 		final int startIndex = url.lastIndexOf('/') + 1;
 		final int endIndex = url.contains("?") ? url.indexOf('?') : url.length();
@@ -33,7 +37,11 @@ public class SpotifyUtils {
 		return spotifyService.getSongTitle(getSpotifyIdentifier(song));
 	}
 
-	public List<String> getSongTitles(final String playlistUrl) {
+	public List<String> getPlayListSongTitles(final String playlistUrl) {
 		return spotifyService.loadPlaylist(getSpotifyIdentifier(playlistUrl));
+	}
+
+	public List<String> getAlbumSongTitles(final String albumurl) {
+		return spotifyService.loadAlbum(getSpotifyIdentifier(albumurl));
 	}
 }

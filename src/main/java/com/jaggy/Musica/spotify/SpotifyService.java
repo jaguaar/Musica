@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.wrapper.spotify.model_objects.specification.Album;
+import com.wrapper.spotify.requests.data.albums.GetAlbumRequest;
 import org.apache.hc.core5.http.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -40,6 +42,20 @@ public class SpotifyService {
 					.collect(Collectors.toList());
 		} catch (final IOException | SpotifyWebApiException | ParseException e) {
 			LOG.error("Could not load playlist {} {}", playlistId, e);
+		}
+
+		return new ArrayList<>();
+	}
+
+	public List<String> loadAlbum(final String albumId) {
+		final GetAlbumRequest albumRequest = spotifyConnector.getApi().getAlbum(albumId).build();
+		try {
+			final Album album = albumRequest.execute();
+			return Arrays.stream(album.getTracks().getItems())
+					.map(track -> getSongTitle(track.getId()))
+					.collect(Collectors.toList());
+		} catch (final IOException | SpotifyWebApiException | ParseException e) {
+			LOG.error("Could not load album {} {}", albumId, e);
 		}
 
 		return new ArrayList<>();
