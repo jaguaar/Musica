@@ -8,6 +8,8 @@ import java.util.List;
 
 @Component
 public class SpotifyUtils {
+
+	public static final String OPEN_SPOTIFY_COM = "open.spotify.com";
 	private final SpotifyService spotifyService;
 
 	@Autowired
@@ -16,7 +18,7 @@ public class SpotifyUtils {
 	}
 
 	public boolean isSpotify(final String url) {
-		return url.toLowerCase().contains("open.spotify.com");
+		return url.toLowerCase().contains(OPEN_SPOTIFY_COM);
 	}
 
 	public List<String> getSongTitles(final String url) {
@@ -53,15 +55,15 @@ public class SpotifyUtils {
 	}
 
 	private boolean isSpotifySong(final String url) {
-		return url.toLowerCase().contains("open.spotify.com") && url.toLowerCase().contains("/track/");
+		return url.toLowerCase().contains(OPEN_SPOTIFY_COM) && url.toLowerCase().contains("/track/");
 	}
 
 	private boolean isSpotifyPlaylist(final String url) {
-		return url.toLowerCase().contains("open.spotify.com") && url.toLowerCase().contains("/playlist/");
+		return url.toLowerCase().contains(OPEN_SPOTIFY_COM) && url.toLowerCase().contains("/playlist/");
 	}
 
 	private boolean isSpotifyAlbum(final String url) {
-		return url.toLowerCase().contains("open.spotify.com") && url.toLowerCase().contains("/album/");
+		return url.toLowerCase().contains(OPEN_SPOTIFY_COM) && url.toLowerCase().contains("/album/");
 	}
 
 }
