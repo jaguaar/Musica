@@ -1,5 +1,6 @@
 package com.jaggy.Musica.handlers;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,34 +40,27 @@ public class PlayHandlerImpl implements PlayHandler {
 			}
 
 			final String url = args.get(0);
+			final List<AudioTrack> tracks = new ArrayList<>();
 
-			if (spotifyUtils.isSpotifyPlaylist(url)) {
-				final List<String> songTitles = spotifyUtils.getPlayListSongTitles(url);
-				songTitles.parallelStream().map(youtubeUtils::searchSong).forEachOrdered(track -> playTrack(track, playNext));
-				message.getChannel().sendMessage(":arrow_forward: Added " + songTitles.size() + " songs from the playlist to the Queue!").queue();
-				return;
-			} else if (spotifyUtils.isSpotifyAlbum(url)) {
-				final List<String> songTitles = spotifyUtils.getAlbumSongTitles(url);
-				songTitles.parallelStream().map(youtubeUtils::searchSong).forEachOrdered(track -> playTrack(track, playNext));
-				message.getChannel().sendMessage(":arrow_forward: Added " + songTitles.size() + " songs from the album to the Queue!").queue();
-				return;
-			}
-
-			final AudioTrack audioTrack;
-
-			if (youtubeUtils.isYoutubeSong(url)) {
-				audioTrack = youtubeUtils.getAudioTrack(url);
-			} else if (spotifyUtils.isSpotifySong(url)) {
-				final String songTitle = spotifyUtils.getSongTitle(url);
-				audioTrack = youtubeUtils.searchSong(songTitle);
+			if (spotifyUtils.isSpotify(url)) {
+				final List<String> songTitles = spotifyUtils.getSongTitles(url);
+				songTitles.parallelStream().map(youtubeUtils::searchSong).forEachOrdered(tracks::add);
+			} else if (youtubeUtils.isYoutubeSong(url)) {
+				tracks.add(youtubeUtils.getAudioTrack(url));
 			} else {
 				// Just search it
-				audioTrack = youtubeUtils.searchSong(args.stream().collect(Collectors.joining(" ")));
+				tracks.add(youtubeUtils.searchSong(args.stream().collect(Collectors.joining(" "))));
 			}
 
-			message.getChannel()
-					.sendMessage(":arrow_forward: Added " + audioTrack.getInfo().title + " to the Queue! (" + audioTrack.getInfo().uri + ")").queue();
-			playTrack(audioTrack, playNext);
+			if (tracks.size() == 1) {
+				message.getChannel().sendMessage(":arrow_forward: Added " + tracks.get(0).getInfo().title + " to the Queue! (" + tracks.get(0).getInfo().uri + ")").queue();
+			} else if (tracks.size() > 1) {
+				message.getChannel().sendMessage(":arrow_forward: Added " + tracks.size() + " songs from to the Queue!").queue();
+			}
+
+			tracks.forEach(track -> {
+				playTrack(track, playNext);
+			});
 		}
 	}
 
