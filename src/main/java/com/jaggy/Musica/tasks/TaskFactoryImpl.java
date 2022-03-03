@@ -5,11 +5,7 @@ import org.springframework.stereotype.Component;
 
 import com.jaggy.Musica.JaggyBot;
 import com.jaggy.Musica.events.CommandEvent;
-import com.jaggy.Musica.tasks.audio.ClearTask;
-import com.jaggy.Musica.tasks.audio.PlayTask;
-import com.jaggy.Musica.tasks.audio.QueueTask;
-import com.jaggy.Musica.tasks.audio.ShuffleTask;
-import com.jaggy.Musica.tasks.audio.SkipTask;
+import com.jaggy.Musica.tasks.audio.*;
 import com.jaggy.Musica.tasks.messaging.InsultTask;
 
 @Component
@@ -24,8 +20,10 @@ public class TaskFactoryImpl implements TaskFactory {
 	@Override
 	public Task buildTask(final CommandEvent commandEvent) {
 		return switch (commandEvent.getAction()) {
-		case "play", "p" -> new PlayTask(bot, commandEvent.getMessage(), commandEvent.getArgs(), false);
-		case "playnext", "pn" -> new PlayTask(bot, commandEvent.getMessage(), commandEvent.getArgs(), true);
+		case "play", "p" -> new PlayTask(bot, commandEvent.getMessage(), commandEvent.getArgs(), false, false);
+		case "playshuffle", "ps" -> new PlayTask(bot, commandEvent.getMessage(), commandEvent.getArgs(), false, true);
+		case "playnext", "pn" -> new PlayTask(bot, commandEvent.getMessage(), commandEvent.getArgs(), true, false);
+		case "playnextshuffle", "pns" -> new PlayTask(bot, commandEvent.getMessage(), commandEvent.getArgs(), true, true);
 		case "skip", "s" -> new SkipTask(bot, commandEvent.getMessage());
 		case "queue", "q" -> new QueueTask(bot, commandEvent.getMessage());
 		case "shuffle" -> new ShuffleTask(bot, commandEvent.getMessage());
