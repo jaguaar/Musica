@@ -53,14 +53,6 @@ public class PlayHandlerImpl implements PlayHandler {
 				tracks.add(youtubeUtils.searchSong(args.stream().collect(Collectors.joining(" "))));
 			}
 
-			if (tracks.size() == 1) {
-				message.getChannel().sendMessage(":arrow_forward: Added " + tracks.get(0).getInfo().title + " to the Queue! (" + tracks.get(0).getInfo().uri + ")").queue();
-			} else if (tracks.size() > 1) {
-				final String messageText = shuffle ? ":arrow_forward: Added " + tracks.size() + " songs from to the Queue! (Shuffled!)" :
-						":arrow_forward: Added " + tracks.size() + " songs from to the Queue!";
-				message.getChannel().sendMessage(messageText).queue();
-			}
-
 			if(shuffle) {
 				Collections.shuffle(tracks);
 			}
@@ -68,6 +60,14 @@ public class PlayHandlerImpl implements PlayHandler {
 			tracks.forEach(track -> {
 				playTrack(track, playNext);
 			});
+
+			if (tracks.size() == 1) {
+				message.getChannel().sendMessage(":arrow_forward: Added " + tracks.get(0).getInfo().title + " to the Queue! (" + tracks.get(0).getInfo().uri + ")").queue();
+			} else if (tracks.size() > 1) {
+				final String messageText = shuffle ? ":arrow_forward: Added " + tracks.size() + " songs from to the Queue! (Shuffled!)" :
+						":arrow_forward: Added " + tracks.size() + " songs from to the Queue!";
+				message.getChannel().sendMessage(messageText).queue();
+			}
 		}
 	}
 
