@@ -18,6 +18,7 @@ import net.dv8tion.jda.api.managers.AudioManager;
 
 @Component
 public class PlayHandlerImpl implements PlayHandler {
+	public static final String ADDED = ":arrow_forward: Added ";
 	private final SoundHandler soundHandler;
 	private final YoutubeUtils youtubeUtils;
 	private final SpotifyUtils spotifyUtils;
@@ -62,10 +63,10 @@ public class PlayHandlerImpl implements PlayHandler {
 			});
 
 			if (tracks.size() == 1) {
-				message.getChannel().sendMessage(":arrow_forward: Added " + tracks.get(0).getInfo().title + " to the Queue! (" + tracks.get(0).getInfo().uri + ")").queue();
+				message.getChannel().sendMessage(ADDED + tracks.get(0).getInfo().title + " to the Queue! (" + tracks.get(0).getInfo().uri + ")").queue();
 			} else if (tracks.size() > 1) {
-				final String messageText = shuffle ? ":arrow_forward: Added " + tracks.size() + " songs from to the Queue! (Shuffled!)" :
-						":arrow_forward: Added " + tracks.size() + " songs from to the Queue!";
+				final String messageText = shuffle ? ADDED + tracks.size() + " songs to the Queue! (Shuffled!)" :
+						ADDED + tracks.size() + " songs to the Queue!";
 				message.getChannel().sendMessage(messageText).queue();
 			}
 		}
