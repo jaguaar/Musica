@@ -48,7 +48,7 @@ public class PlayHandlerImpl implements PlayHandler {
 			} else if (spotifyUtils.isSpotifyAlbum(url)) {
 				final List<String> songTitles = spotifyUtils.getAlbumSongTitles(url);
 				songTitles.parallelStream().map(youtubeUtils::searchSong).forEachOrdered(track -> playTrack(track, playNext));
-				message.getChannel().sendMessage(":arrow_forward: Added " + songTitles.size() + " songs from the playlist to the Queue!").queue();
+				message.getChannel().sendMessage(":arrow_forward: Added " + songTitles.size() + " songs from the album to the Queue!").queue();
 				return;
 			}
 
