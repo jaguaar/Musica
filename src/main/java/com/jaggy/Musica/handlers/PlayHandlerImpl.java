@@ -45,6 +45,7 @@ public class PlayHandlerImpl implements PlayHandler {
 			final List<AudioTrack> tracks = new ArrayList<>();
 
 			if (spotifyUtils.isSpotify(url)) {
+				message.getChannel().sendMessage("Processing " + url).queue();
 				final List<String> songTitles = spotifyUtils.getSongTitles(url);
 				songTitles.parallelStream().map(youtubeUtils::searchSong).forEachOrdered(tracks::add);
 			} else if (youtubeUtils.isYoutubeSong(url)) {
