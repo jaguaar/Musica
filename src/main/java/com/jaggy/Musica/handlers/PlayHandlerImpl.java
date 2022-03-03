@@ -56,7 +56,9 @@ public class PlayHandlerImpl implements PlayHandler {
 			if (tracks.size() == 1) {
 				message.getChannel().sendMessage(":arrow_forward: Added " + tracks.get(0).getInfo().title + " to the Queue! (" + tracks.get(0).getInfo().uri + ")").queue();
 			} else if (tracks.size() > 1) {
-				message.getChannel().sendMessage(":arrow_forward: Added " + tracks.size() + " songs from to the Queue!").queue();
+				final String messageText = shuffle ? ":arrow_forward: Added " + tracks.size() + " songs from to the Queue! (Shuffled!)" :
+						":arrow_forward: Added " + tracks.size() + " songs from to the Queue!";
+				message.getChannel().sendMessage(messageText).queue();
 			}
 
 			if(shuffle) {
