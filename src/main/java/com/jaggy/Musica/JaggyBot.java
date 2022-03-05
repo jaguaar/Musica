@@ -9,7 +9,7 @@ import com.jaggy.Musica.events.CommandEvent;
 import com.jaggy.Musica.events.CommandEventListener;
 import com.jaggy.Musica.events.MessageEventListener;
 import com.jaggy.Musica.handlers.PlayHandler;
-import com.jaggy.Musica.services.messaging.InsultService;
+import com.jaggy.Musica.services.messaging.MessageGenerator;
 import com.jaggy.Musica.tasks.Task;
 import com.jaggy.Musica.tasks.TaskFactory;
 
@@ -22,17 +22,17 @@ public class JaggyBot implements CommandEventListener {
 
 	private final TaskFactory taskFactory;
 	private final PlayHandler playHandler;
-	private final InsultService insultService;
+	private final MessageGenerator messageGenerator;
 
 	public JaggyBot(final MessageEventListener messageEventListener, final TaskFactory taskFactory, final PlayHandler playHandler,
-                    @Value("${discord.token}") final String token, final InsultService insultService) throws LoginException {
+			@Value("${discord.token}") final String token, final MessageGenerator messageGenerator) throws LoginException {
 		this.jda = JDABuilder
 				.createDefault(token)
 				.addEventListeners(messageEventListener)
 				.build();
 		this.taskFactory = taskFactory;
 		this.playHandler = playHandler;
-		this.insultService = insultService;
+		this.messageGenerator = messageGenerator;
 	}
 
 	@Override
@@ -49,7 +49,7 @@ public class JaggyBot implements CommandEventListener {
 		return jda;
 	}
 
-	public InsultService getInsultService() {
-		return insultService;
+	public MessageGenerator getMessageGenerator() {
+		return messageGenerator;
 	}
 }
