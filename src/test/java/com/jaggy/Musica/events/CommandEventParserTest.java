@@ -20,7 +20,7 @@ public class CommandEventParserTest {
 
 	@BeforeEach
 	public void setUp() {
-		parse = new CommandEventParser(".", "musica");
+		parse = new CommandEventParser(0, ".", "musica");
 		receivedMessage = mock(ReceivedMessage.class);
 	}
 

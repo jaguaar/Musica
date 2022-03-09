@@ -26,8 +26,9 @@ public class GifEventParser extends AbstractEventParser {
 
 	private HashMap<String, String> gifCommand;
 
-	public GifEventParser(@Value("${command.prefix}") final String PREFIX, @Value("${command.channel}") final String CHANNEL) {
-		super(PREFIX, CHANNEL);
+	public GifEventParser(@Value("${gif.event.parser.order}") final int order, @Value("${command.prefix}") final String PREFIX,
+			@Value("${command.channel}") final String CHANNEL) {
+		super(order, PREFIX, CHANNEL);
 		loadGifList();
 		this.predicate = predicate.and(isKnownGif());
 	}

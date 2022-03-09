@@ -1,5 +1,6 @@
 package com.jaggy.Musica.events;
 
+import java.util.Comparator;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -46,8 +47,9 @@ public class MessageEventListenerImpl extends ListenerAdapter implements Message
 	private void processMessage(final Message message) {
 		parsers.stream()
 				.filter(abstractEventParser -> abstractEventParser.matches(message))
+				.min(Comparator.comparing(AbstractEventParser::getOrder))
 				.map(abstractEventParser -> abstractEventParser.parseCommandEvent(message))
-				.forEach(commandEvent -> listeners.forEach(l -> l.onCommandEvent(commandEvent)));
+				.ifPresent(commandEvent -> listeners.forEach(l -> l.onCommandEvent(commandEvent)));
 	}
 
 }

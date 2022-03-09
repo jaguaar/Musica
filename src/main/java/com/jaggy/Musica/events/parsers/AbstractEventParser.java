@@ -11,11 +11,13 @@ import net.dv8tion.jda.api.entities.Message;
 
 public abstract class AbstractEventParser {
 
+	private final int order;
 	protected final String PREFIX;
 	protected final String CHANNEL;
 	protected Predicate<Message> predicate;
 
-	AbstractEventParser(final String PREFIX, final String CHANNEL) {
+	AbstractEventParser(final int order, final String PREFIX, final String CHANNEL) {
+		this.order = order;
 		this.PREFIX = PREFIX;
 		this.CHANNEL = CHANNEL;
 		this.predicate = m -> theAuthorIsNotABot(m) && isInChannel(m);
@@ -41,5 +43,9 @@ public abstract class AbstractEventParser {
 
 	boolean isInChannel(final Message message) {
 		return message.getChannel().getName().toLowerCase().contains(CHANNEL);
+	}
+
+	public Integer getOrder() {
+		return order;
 	}
 }
