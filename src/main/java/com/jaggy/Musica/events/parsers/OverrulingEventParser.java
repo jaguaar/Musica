@@ -46,10 +46,7 @@ public class OverrulingEventParser extends AbstractEventParser {
 			if (!List.of("p", "pn", "play", "playnext").contains(parsed.getFirst())) {
 				return false;
 			}
-			if (!overrules.containsKey(message.getAuthor().getName())) {
-				return false;
-			}
-			return true;
+			return overrules.containsKey(message.getAuthor().getName());
 		};
 	}
 

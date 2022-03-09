@@ -47,8 +47,7 @@ public class MessageEventListenerImpl extends ListenerAdapter implements Message
 	private void processMessage(final Message message) {
 		parsers.stream()
 				.filter(abstractEventParser -> abstractEventParser.matches(message))
-				.sorted(Comparator.comparing(AbstractEventParser::getOrder))
-				.findFirst()
+				.min(Comparator.comparing(AbstractEventParser::getOrder))
 				.map(abstractEventParser -> abstractEventParser.parseCommandEvent(message))
 				.ifPresent(commandEvent -> listeners.forEach(l -> l.onCommandEvent(commandEvent)));
 	}
