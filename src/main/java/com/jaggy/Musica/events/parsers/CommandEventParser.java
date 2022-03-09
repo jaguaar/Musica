@@ -14,8 +14,9 @@ import net.dv8tion.jda.api.entities.Message;
 @Component(value = "CommandEventParser")
 public class CommandEventParser extends AbstractEventParser {
 
-	public CommandEventParser(@Value("${command.prefix}") final String PREFIX, @Value("${command.channel}") final String CHANNEL) {
-		super(PREFIX, CHANNEL);
+	public CommandEventParser(@Value("${command.event.parser.order}") final int order, @Value("${command.prefix}") final String PREFIX,
+			@Value("${command.channel}") final String CHANNEL) {
+		super(order, PREFIX, CHANNEL);
 		this.predicate = predicate.and(startsWithCommandPrefix());
 	}
 

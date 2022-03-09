@@ -20,7 +20,7 @@ public class ShortcutEventParserTest {
 
 	@BeforeEach
 	public void setUp() {
-		parse = new ShortcutEventParser(".", "musica");
+		parse = new ShortcutEventParser(0, ".", "musica");
 		receivedMessage = mock(ReceivedMessage.class);
 	}
 
