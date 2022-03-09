@@ -23,8 +23,6 @@ public class PlayHandlerImpl implements PlayHandler {
 	private final YoutubeUtils youtubeUtils;
 	private final SpotifyUtils spotifyUtils;
 
-	private VoiceChannel currentChannel;
-
 	@Autowired
 	public PlayHandlerImpl(final SoundHandler soundHandler, final YoutubeUtils youtubeUtils, final SpotifyUtils spotifyUtils) {
 		this.soundHandler = soundHandler;
@@ -33,13 +31,8 @@ public class PlayHandlerImpl implements PlayHandler {
 	}
 
 	@Override
-	public void play(final Message message, final List<String> args, final boolean playNext, boolean shuffle) {
-		final VoiceChannel channel = message.getMember().getVoiceState().getChannel();
-
-		if (channel != null) {
-			if (currentChannel != channel) {
-				joinChannel(message, channel);
-			}
+	public void play(final Message message, final List<String> args, final boolean playNext, final boolean shuffle) {
+		if (withActiveConnection(message)) {
 
 			final String url = args.get(0);
 			final List<AudioTrack> tracks = new ArrayList<>();
@@ -55,7 +48,7 @@ public class PlayHandlerImpl implements PlayHandler {
 				tracks.add(youtubeUtils.searchSong(args.stream().collect(Collectors.joining(" "))));
 			}
 
-			if(shuffle) {
+			if (shuffle) {
 				Collections.shuffle(tracks);
 			}
 
@@ -64,7 +57,8 @@ public class PlayHandlerImpl implements PlayHandler {
 			});
 
 			if (tracks.size() == 1) {
-				message.getChannel().sendMessage(ADDED + tracks.get(0).getInfo().title + " to the Queue! (" + tracks.get(0).getInfo().uri + ")").queue();
+				message.getChannel().sendMessage(ADDED + tracks.get(0).getInfo().title + " to the Queue! (" + tracks.get(0).getInfo().uri + ")")
+						.queue();
 			} else if (tracks.size() > 1) {
 				final String messageText = ADDED + tracks.size() + " songs to the Queue!";
 				message.getChannel().sendMessage(shuffle ? messageText + " (Shuffled!)" : messageText).queue();
@@ -77,12 +71,18 @@ public class PlayHandlerImpl implements PlayHandler {
 		soundHandler.getTrackScheduler().queue(audioTrack, playNext);
 	}
 
-	private void joinChannel(final Message message, final VoiceChannel channel) {
-		currentChannel = channel;
+	private boolean withActiveConnection(final Message message) {
+		final VoiceChannel channel = message.getMember().getVoiceState().getChannel();
+		if (channel == null) {
+			return false;
+		}
 
-		final AudioManager manager = message.getGuild().getAudioManager();
-		manager.setSendingHandler(soundHandler);
-		manager.openAudioConnection(channel);
+		if (message.getGuild().getAudioManager().getConnectedChannel() != channel) {
+			final AudioManager manager = message.getGuild().getAudioManager();
+			manager.setSendingHandler(soundHandler);
+			manager.openAudioConnection(channel);
+		}
+		return true;
 	}
 
 	@Override
