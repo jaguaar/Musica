@@ -1,6 +1,7 @@
 package com.jaggy.Musica.tasks.audio;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import com.jaggy.Musica.JaggyBot;
 import com.jaggy.Musica.handlers.PlayHandler;
@@ -34,7 +35,8 @@ public class QueueTask implements Task {
 
         final List<AudioTrack> queue = playHandler.getQueue();
         final StringBuilder sb = new StringBuilder(":arrow_forward: ");
-        sb.append(currentlyPlaying.getInfo().title);
+        sb.append(String.format("%s (%s / %s)", currentlyPlaying.getInfo().title,
+                formatMillis(currentlyPlaying.getPosition()), formatMillis(currentlyPlaying.getDuration())));
 
         if (!queue.isEmpty()) {
             boolean overflowingTextLimit = false;
@@ -45,7 +47,7 @@ public class QueueTask implements Task {
                 final StringBuilder currentTrackText = new StringBuilder("\n");
                 currentTrackText.append(count);
                 currentTrackText.append(". ");
-                currentTrackText.append(audioTrack.getInfo().title);
+                currentTrackText.append(String.format("%s (%s)", audioTrack.getInfo().title, formatMillis(audioTrack.getDuration())));
 
                 if (!((sb.length() + currentTrackText.length()) > 1950)) {
                     sb.append(currentTrackText);
@@ -64,5 +66,18 @@ public class QueueTask implements Task {
         }
 
         channel.sendMessage(sb.toString()).queue();
+    }
+
+    private String formatMillis(final long ms) {
+        if (ms < 60 * 60 * 1000) {
+            return String.format("%02d:%02d",
+                    TimeUnit.MILLISECONDS.toMinutes(ms),
+                    TimeUnit.MILLISECONDS.toSeconds(ms) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(ms)));
+        } else {
+            return String.format("%02d:%02d:%02d",
+                    TimeUnit.MILLISECONDS.toHours(ms),
+                    TimeUnit.MILLISECONDS.toMinutes(ms) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(ms)),
+                    TimeUnit.MILLISECONDS.toSeconds(ms) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(ms)));
+        }
     }
 }
