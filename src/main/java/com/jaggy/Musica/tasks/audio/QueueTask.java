@@ -14,6 +14,7 @@ public class QueueTask implements Task {
     private final JaggyBot bot;
 
     private final Message message;
+    private final int MAX_TEXT_LENGTH = 1950;
 
     public QueueTask(JaggyBot bot, Message message) {
         this.bot = bot;
@@ -40,14 +41,25 @@ public class QueueTask implements Task {
             boolean overflowingTextLimit = false;
             int count = 1;
 
-            sb.append("\n:notes: Current Queue:\n`");
+            sb.append("\n:notes: Current Queue (Song count: ").append(queue.size()).append("):\n");
             for (final AudioTrack audioTrack : queue) {
-                final StringBuilder currentTrackText = new StringBuilder("\n");
+                if(overflowingTextLimit) {
+                    continue;
+                }
+
+                final StringBuilder currentTrackText = new StringBuilder();
+
+                if(count == 1) {
+                    currentTrackText.append("```");
+                } else {
+                    currentTrackText.append("\n");
+                }
+
                 currentTrackText.append(count);
                 currentTrackText.append(". ");
                 currentTrackText.append(audioTrack.getInfo().title);
 
-                if (!((sb.length() + currentTrackText.length()) > 1950)) {
+                if (!((sb.length() + currentTrackText.length()) > MAX_TEXT_LENGTH)) {
                     sb.append(currentTrackText);
                 } else {
                     overflowingTextLimit = true;
@@ -60,7 +72,7 @@ public class QueueTask implements Task {
                 sb.append("\n... And more...");
             }
 
-            sb.append("`");
+            sb.append("```");
         }
 
         channel.sendMessage(sb.toString()).queue();
