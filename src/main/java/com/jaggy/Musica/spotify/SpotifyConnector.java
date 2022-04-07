@@ -10,9 +10,9 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.wrapper.spotify.SpotifyApi;
-import com.wrapper.spotify.exceptions.SpotifyWebApiException;
-import com.wrapper.spotify.model_objects.credentials.ClientCredentials;
+import se.michaelthelin.spotify.SpotifyApi;
+import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
+import se.michaelthelin.spotify.model_objects.credentials.ClientCredentials;
 
 @Component
 public class SpotifyConnector {
@@ -26,7 +26,7 @@ public class SpotifyConnector {
 
 	public SpotifyConnector(@Value("${spotify.client.id}") final String clientId, @Value("${spotify.client.secret}") final String clientSecret)
 			throws IOException, ParseException, SpotifyWebApiException {
-		spotifyApi = new com.wrapper.spotify.SpotifyApi.Builder()
+		spotifyApi = new SpotifyApi.Builder()
 				.setClientId(clientId)
 				.setClientSecret(clientSecret)
 				.build();
