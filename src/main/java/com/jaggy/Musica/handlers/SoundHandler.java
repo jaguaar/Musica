@@ -2,6 +2,8 @@ package com.jaggy.Musica.handlers;
 
 import java.nio.ByteBuffer;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +18,9 @@ import net.dv8tion.jda.api.audio.AudioSendHandler;
 
 @Component
 public class SoundHandler implements AudioSendHandler {
+
+	private final Logger LOG = LogManager.getLogger(SoundHandler.class);
+
 	private final AudioPlayer audioPlayer;
 	private final AudioPlayerManager manager;
 	private final TrackScheduler trackScheduler;
@@ -27,6 +32,7 @@ public class SoundHandler implements AudioSendHandler {
 		this.manager = new DefaultAudioPlayerManager();
 		this.audioPlayer = manager.createPlayer();
 		this.audioPlayer.setVolume(volume);
+		LOG.info("Volume set: " + volume);
 
 		this.buffer = ByteBuffer.allocate(1024);
 		this.frame = new MutableAudioFrame();
