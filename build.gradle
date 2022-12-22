@@ -41,11 +41,10 @@ dependencies {
 
     implementation("com.fasterxml.jackson.core:jackson-core:2.10.0")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.10.0")
-    implementation('org.jsoup:jsoup:1.15.3')
+    implementation("org.jsoup:jsoup:1.12.1")
     implementation("net.iharder:base64:2.3.9")
     implementation("org.json:json:20220924")
-
-//    implementation(files("libs/LavaPlayerForkWalkyst.jar"))
+    
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
