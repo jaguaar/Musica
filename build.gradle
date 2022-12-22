@@ -27,12 +27,25 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'se.michaelthelin.spotify:spotify-web-api-java:7.1.0'
     implementation 'net.dv8tion:JDA:4.3.0_277'
-//    implementation 'com.github.sapher:youtubedl-java:1.1'
-    // Return to branch if working again
-    // implementation 'com.github.walkyst:lavaplayer-fork:1.3.97'
-//    implementation 'com.sedmelluq:lavaplayer:1.3.77'
-//    implementation(files("libs/Lavalink.jar"))
-    implementation(files("libs/lavaplayer-fork-1.3.97.jar"))
+    implementation 'org.apache.httpcomponents:httpclient:4.5.13'
+    implementation 'commons-io:commons-io:2.11.0'
+    implementation 'org.mozilla:rhino-engine:1.7.14'
+
+    implementation(files("libs/main-1.3.99.2.jar"))
+    implementation(files("libs/common-1.1.2.jar"))
+    implementation(files("libs/extensions.jar"))
+    implementation(files("libs/node-1.2.50-boot.jar"))
+    implementation(files("libs/stream-merger-0.1.0.jar"))
+    implementation(files("libs/natives.jar"))
+    implementation(files("libs/natives-publish-1.3.15.jar"))
+
+    implementation("com.fasterxml.jackson.core:jackson-core:2.10.0")
+    implementation('com.fasterxml.jackson.core:jackson-databind:2.14.0')
+    implementation('org.jsoup:jsoup:1.15.3')
+    implementation("net.iharder:base64:2.3.9")
+    implementation("org.json:json:20220924")
+
+//    implementation(files("libs/LavaPlayerForkWalkyst.jar"))
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
