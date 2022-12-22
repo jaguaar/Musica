@@ -30,8 +30,9 @@ dependencies {
 //    implementation 'com.github.sapher:youtubedl-java:1.1'
     // Return to branch if working again
     // implementation 'com.github.walkyst:lavaplayer-fork:1.3.97'
-    implementation 'com.sedmelluq:lavaplayer:1.3.77'
-//    implementation(files("libs/lavaplayer-fork-1.3.97.jar"))
+//    implementation 'com.sedmelluq:lavaplayer:1.3.77'
+//    implementation(files("libs/Lavalink.jar"))
+    implementation(files("libs/lavaplayer-fork-1.3.97.jar"))
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
