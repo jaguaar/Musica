@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -13,8 +12,7 @@ import org.springframework.stereotype.Component;
 import com.jaggy.Musica.events.parsers.AbstractEventParser;
 
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 @Async
@@ -33,14 +31,8 @@ public class MessageEventListenerImpl extends ListenerAdapter implements Message
 	}
 
 	@Override
-	public void onGuildMessageReceived(final GuildMessageReceivedEvent event) {
-		LOG.debug("Guild message received from {}", event.getAuthor());
-		processMessage(event.getMessage());
-	}
-
-	@Override
-	public void onPrivateMessageReceived(@NotNull final PrivateMessageReceivedEvent event) {
-		LOG.debug("Private message received from {}", event.getAuthor());
+	public void onMessageReceived(final MessageReceivedEvent event) {
+		LOG.info("Message received from {} {}", event.getAuthor(), event.getChannelType());
 		processMessage(event.getMessage());
 	}
 

@@ -15,6 +15,7 @@ import com.jaggy.Musica.tasks.TaskFactory;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 
 @Component
 public class JaggyBot implements CommandEventListener {
@@ -28,6 +29,7 @@ public class JaggyBot implements CommandEventListener {
 			@Value("${discord.token}") final String token, final MessageGenerator messageGenerator) throws LoginException {
 		this.jda = JDABuilder
 				.createDefault(token)
+				.enableIntents(GatewayIntent.MESSAGE_CONTENT)
 				.addEventListeners(messageEventListener)
 				.build();
 		this.taskFactory = taskFactory;

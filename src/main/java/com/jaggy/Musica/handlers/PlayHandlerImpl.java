@@ -13,7 +13,6 @@ import com.jaggy.Musica.youtube.YoutubeUtils;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
 
 @Component
@@ -72,7 +71,7 @@ public class PlayHandlerImpl implements PlayHandler {
 	}
 
 	private boolean withActiveConnection(final Message message) {
-		final VoiceChannel channel = message.getMember().getVoiceState().getChannel();
+		final var channel = message.getMember().getVoiceState().getChannel();
 		if (channel == null) {
 			return false;
 		}

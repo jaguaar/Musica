@@ -19,7 +19,7 @@ abstract class AbstractPrivateMessageTask implements Task {
 
 	@Override
 	public void execute() {
-		message.getMentionedMembers().forEach(member -> {
+		message.getMentions().getMembers().forEach(member -> {
 			member.getUser().openPrivateChannel().queue(privateChannel -> {
 				privateChannel.sendMessage(getMessage().get()).queue();
 			});

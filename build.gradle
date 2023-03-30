@@ -26,7 +26,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'se.michaelthelin.spotify:spotify-web-api-java:7.1.0'
-    implementation 'net.dv8tion:JDA:4.3.0_277'
+    implementation 'net.dv8tion:JDA:5.0.0-beta.6'
     implementation 'org.apache.httpcomponents:httpclient:4.5.13'
     implementation 'commons-io:commons-io:2.11.0'
     implementation 'org.mozilla:rhino-engine:1.7.14'
@@ -44,7 +44,7 @@ dependencies {
     implementation("org.jsoup:jsoup:1.12.1")
     implementation("net.iharder:base64:2.3.9")
     implementation("org.json:json:20220924")
-    
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
