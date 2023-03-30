@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import com.jaggy.Musica.events.CommandEvent;
 
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.unions.MessageChannelUnion;
 import net.dv8tion.jda.internal.entities.SelfUserImpl;
 
 class OverrulingEventParserTest {
@@ -69,7 +69,7 @@ class OverrulingEventParserTest {
 		final SelfUserImpl selfUser = new SelfUserImpl(1L, null);
 		selfUser.setName(userName);
 		when(message.getAuthor()).thenReturn(selfUser);
-		final TextChannel textChannel = mock(TextChannel.class);
+		final MessageChannelUnion textChannel = mock(MessageChannelUnion.class);
 		when(textChannel.getName()).thenReturn("musica");
 		when(message.getChannel()).thenReturn(textChannel);
 
