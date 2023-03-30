@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import com.jaggy.Musica.events.parsers.CommandEventParser;
 
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.unions.MessageChannelUnion;
 import net.dv8tion.jda.internal.entities.ReceivedMessage;
 import net.dv8tion.jda.internal.entities.SelfUserImpl;
 
@@ -45,7 +45,7 @@ public class CommandEventParserTest {
 	private void mockMessage(final String message) {
 		when(receivedMessage.getContentRaw()).thenReturn(message);
 		when(receivedMessage.getAuthor()).thenReturn(new SelfUserImpl(1L, null));
-		final TextChannel textChannel = mock(TextChannel.class);
+		final MessageChannelUnion textChannel = mock(MessageChannelUnion.class);
 		when(textChannel.getName()).thenReturn("musica");
 		when(receivedMessage.getChannel()).thenReturn(textChannel);
 	}
