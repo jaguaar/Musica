@@ -2,6 +2,7 @@ package com.jaggy.Musica;
 
 import javax.security.auth.login.LoginException;
 
+import com.jaggy.Musica.events.GuildEventListener;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -25,8 +26,8 @@ public class JaggyBot implements CommandEventListener {
 	private final PlayHandler playHandler;
 	private final MessageGenerator messageGenerator;
 
-	public JaggyBot(final MessageEventListener messageEventListener, final TaskFactory taskFactory, final PlayHandler playHandler,
-			@Value("${discord.token}") final String token, final MessageGenerator messageGenerator) throws LoginException {
+	public JaggyBot(final MessageEventListener messageEventListener, final GuildEventListener guildEventListener, final TaskFactory taskFactory, final PlayHandler playHandler,
+					@Value("${discord.token}") final String token, final MessageGenerator messageGenerator) throws LoginException {
 		this.jda = JDABuilder
 				.createDefault(token)
 				.enableIntents(GatewayIntent.MESSAGE_CONTENT)
