@@ -5,12 +5,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.jaggy.Musica.spotify.SpotifyUtils;
 import com.jaggy.Musica.youtube.YoutubeUtils;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.managers.AudioManager;
@@ -41,7 +41,7 @@ public class PlayHandlerImpl implements PlayHandler {
 				final List<String> songTitles = spotifyUtils.getSongTitles(url);
 				songTitles.parallelStream().map(youtubeUtils::searchSong).forEachOrdered(tracks::add);
 			} else if (youtubeUtils.isYoutubeSong(url)) {
-				tracks.add(youtubeUtils.getAudioTrack(url));
+				tracks.add(youtubeUtils.getAudioTrack(url, soundHandler.getManager()));
 			} else {
 				// Just search it
 				tracks.add(youtubeUtils.searchSong(args.stream().collect(Collectors.joining(" "))));

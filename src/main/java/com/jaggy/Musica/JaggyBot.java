@@ -29,7 +29,7 @@ public class JaggyBot implements CommandEventListener {
 			@Value("${discord.token}") final String token, final MessageGenerator messageGenerator) throws LoginException {
 		this.jda = JDABuilder
 				.createDefault(token)
-				.enableIntents(GatewayIntent.MESSAGE_CONTENT)
+				.enableIntents(GatewayIntent.MESSAGE_CONTENT, GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_MEMBERS)
 				.addEventListeners(messageEventListener)
 				.build();
 		this.taskFactory = taskFactory;

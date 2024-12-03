@@ -62,4 +62,8 @@ public class SoundHandler implements AudioSendHandler {
 	public TrackScheduler getTrackScheduler() {
 		return trackScheduler;
 	}
+
+	public AudioPlayerManager getManager() {
+		return manager;
+	}
 }
