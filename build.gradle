@@ -20,6 +20,8 @@ repositories {
         name 'jitpack'
         url 'https://jitpack.io'
     }
+    maven { url = "https://maven.lavalink.dev/releases" }
+
 }
 
 dependencies {
@@ -31,15 +33,8 @@ dependencies {
     implementation 'commons-io:commons-io:2.11.0'
     implementation 'org.mozilla:rhino-engine:1.7.14'
 
-    implementation 'dev.arbjerg:lavaplayer:2.0.1'
-
-//    implementation(files("libs/main-1.3.99.2.jar"))
-//    implementation(files("libs/common-1.1.2.jar"))
-//    implementation(files("libs/extensions.jar"))
-//    implementation(files("libs/node-1.2.50-boot.jar"))
-//    implementation(files("libs/stream-merger-0.1.0.jar"))
-//    implementation(files("libs/natives.jar"))
-//    implementation(files("libs/natives-publish-1.3.15.jar"))
+    implementation 'dev.arbjerg:lavaplayer:2.2.2'
+    implementation("dev.lavalink.youtube:v2:1.10.2")
 
     implementation("com.fasterxml.jackson.core:jackson-core:2.10.0")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.10.0")
