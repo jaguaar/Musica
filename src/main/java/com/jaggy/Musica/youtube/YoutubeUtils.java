@@ -13,6 +13,8 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class YoutubeUtils {
     private final YoutubeAudioSourceManager youtubeAudioSourceManager;
@@ -27,22 +29,21 @@ public class YoutubeUtils {
         return input.toLowerCase().contains("youtube.com") || input.toLowerCase().contains("youtu.be");
     }
 
-    public YoutubeAudioTrack getAudioTrack(final String song, @NotNull AudioPlayerManager manager) {
-        String videoId;
+    public List<AudioTrack> getAudioTracks(final String url, @NotNull AudioPlayerManager manager) {
+        AudioItem audioItem = youtubeAudioSourceManager.loadItem(manager, new AudioReference(url, ""));
 
-        if (song.contains("?v=")) {
-            videoId = song.substring(song.indexOf("?v=") + 3);
+        if (audioItem instanceof BasicAudioPlaylist playlist) {
+            return playlist.getTracks();
+        } else if (audioItem instanceof YoutubeAudioTrack youtubeAudioTrack) {
+            return List.of(youtubeAudioTrack);
         } else {
-            videoId = song.substring(song.lastIndexOf("/") + 1);
+            throw new IllegalStateException("Unkown type " + audioItem);
         }
-
-        return (YoutubeAudioTrack) youtubeAudioSourceManager.loadItem(manager, new AudioReference(videoId, ""));
     }
 
     public AudioTrack searchSong(String song) {
         YoutubeSearchProvider youtubeSearchProvider = new YoutubeSearchProvider();
         final AudioItem audioItem = youtubeSearchProvider.loadSearchResult(song, audioTrackInfo -> new YoutubeAudioTrack(audioTrackInfo, youtubeAudioSourceManager));
-
         return ((BasicAudioPlaylist) audioItem).getTracks().get(0);
     }
 }

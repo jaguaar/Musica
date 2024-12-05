@@ -1,8 +1,11 @@
 package com.jaggy.Musica.spotify;
 
+import org.apache.hc.core5.http.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +24,7 @@ public class SpotifyUtils {
 		return url.toLowerCase().contains(OPEN_SPOTIFY_COM);
 	}
 
-	public List<String> getSongTitles(final String url) {
+	public List<String> getSongTitles(final String url) throws IOException, ParseException, SpotifyWebApiException {
 		final List<String> songTitles = new ArrayList<>();
 
 		if (isSpotifySong(url)) {
@@ -46,7 +49,7 @@ public class SpotifyUtils {
 		return spotifyService.getSongTitle(getSpotifyIdentifier(url));
 	}
 
-	private List<String> getPlayListSongTitles(final String url) {
+	private List<String> getPlayListSongTitles(final String url) throws IOException, ParseException, SpotifyWebApiException {
 		return spotifyService.loadPlaylist(getSpotifyIdentifier(url));
 	}
 

@@ -33,7 +33,7 @@ public class SpotifyService {
 		this.spotifyConnector = spotifyConnector;
 	}
 
-	public List<String> loadPlaylist(final String playlistId) {
+	public List<String> loadPlaylist(final String playlistId) throws IOException, ParseException, SpotifyWebApiException {
 		final GetPlaylistRequest getPlaylistRequest = spotifyConnector.getApi().getPlaylist(playlistId).build();
 		try {
 			final Playlist playlist = getPlaylistRequest.execute();
@@ -42,9 +42,8 @@ public class SpotifyService {
 					.collect(Collectors.toList());
 		} catch (final IOException | SpotifyWebApiException | ParseException e) {
 			LOG.error("Could not load playlist {} {}", playlistId, e);
+			throw e;
 		}
-
-		return new ArrayList<>();
 	}
 
 	public List<String> loadAlbum(final String albumId) {
